@@ -58,3 +58,7 @@ class Client:
     async def participate(self):
         data_dict, performance_dict = load_model_file(self.model_path,self.lmfile)
         _, gene_time, models, model_id = compatible_data_dict_read(data_dict)
+
+        logging.debug(models)
+
+        msg = generate_agent_participation_message()
