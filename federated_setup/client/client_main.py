@@ -5,7 +5,10 @@ import sys
 import os
 from typing import Dict,Any
 from threading import Thread
+from federated_setup.lib.util.communication_module import init_client_server,send,recieve
 from federated_setup.lib.util.helper_function import generate_id,get_ip,set_config_file,read_config,compatible_data_dict_read,load_model_file,compatible_data_dict_read
+from federated_setup.lib.util.states_function import IDPrefix,ClientState, AggMsgType, ParticipateConfirmationMSGLocation, GMDistributionMsgLocation, PollingMSGLocation
+from federated_setup.lib.util.messenger_function import generate_lmodel_update_message, generate_agent_participation_message, generate_polling_message
 
 class Client:
 
@@ -61,4 +64,9 @@ class Client:
 
         logging.debug(models)
 
-        msg = generate_agent_participation_message()
+        msg = generate_agent_participation_message(
+            self.agent_name,self.id,model_id,models,self.init_weights_flag,self.simulation_flag,
+            self.exch_socket,gene_time,performance_dict,self.agent_ip
+        )
+
+        resp = await send(msg,self.aggr_ip,self.reg_socket)
