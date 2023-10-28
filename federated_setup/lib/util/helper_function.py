@@ -85,3 +85,45 @@ def generate_model_id(component_type: str, component_id: str, generation_time: f
     return hash_id.hexdigest()
     
     
+def save_model_file(data_dict: Dict[str,Any], path: str, name: str,perforomance_dict: Dict[str,float] = dict()):
+
+    data_dict['performance'] = perforomance_dict
+
+    fname = f'{path}/{name}'
+    with open(fname, 'wb') as f:
+        pickle.dump(data_dict,f)
+
+def create_data_dict_from_models(model_id,models,component_id):
+    data_dict = dict()
+    data_dict['models'] = models
+    data_dict['model_id'] = model_id
+    data_dict['my_id'] = component_id
+    data_dict['gene_time'] = time.time()
+
+    return data_dict
+
+def read_state(path: str, name: str)->ClientState:
+
+    fname = f'{path}/{name}'
+    with open (fname, 'r') as f:
+        st = f.read()
+
+    if st == '':
+        time.sleep(0.01)
+        return read_state(path,name)
+    
+    return int(st)
+
+def write_state(path: str, name: str, state: ClientState):
+    fname = f'{path}/{name}'
+    with open(fname, 'w') as f:
+        f.write(str(int(state)))
+
+def create_meta_data_dict(perf_val,num_samples):
+    meta_data_dict = dict()
+    meta_data_dict["accuracy"] = perf_val
+    meta_data_dict["num_samples"] = num_samples
+    return meta_data_dict
+
+
+    
