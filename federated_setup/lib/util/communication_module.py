@@ -55,7 +55,7 @@ async def send_websocket(msg,websocket):
         await asyncio.sleep(0.001)
     await websocket.send(pickle.dumps(msg))
 
-async def recieve(websocket):
+async def receive(websocket):
     return pickle.loads(await websocket.recv())
 
 
